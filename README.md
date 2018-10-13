@@ -1,4 +1,4 @@
-# ymutils
+# myutils
 My python utils package for private use
 
 ## Requirement
