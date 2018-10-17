@@ -1,4 +1,4 @@
-from common import misc_util
+from myutils.common import misc_util
 
 
 LOSS_DICT = misc_util.get_classes_as_dict('torch.nn.modules.loss')
