@@ -1,10 +1,10 @@
 import numpy as np
-import torch.utils.data as data
 import torchvision.transforms.functional as functional
 from PIL import Image
+from torch.utils.data import Dataset
 
 
-class RgbImageDataset(data.Dataset):
+class RgbImageDataset(Dataset):
     def __init__(self, file_path, size, transform=None, delimiter='\t'):
         self.transform = transform
         self.size = size
