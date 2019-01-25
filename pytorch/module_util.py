@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 
 
 def freeze_module_params(module):
@@ -63,7 +64,8 @@ def extract_decomposable_modules(parent_module, z, module_list, output_size_list
             output_size_list.append([*expected_z.size()])
         else:
             output_size_list.append(len(expected_z))
-    elif len(module_list) == len(output_size_list) == 0 and len(submodule_list) > 0 and len(sub_output_size_list) > 0:
+    elif not isinstance(parent_module, nn.DataParallel) and len(module_list) == len(output_size_list) == 0\
+            and len(submodule_list) > 0 and len(sub_output_size_list) > 0:
         module_list.extend(submodule_list)
         output_size_list.extend(sub_output_size_list)
     return expected_z, True
