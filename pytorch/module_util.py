@@ -49,18 +49,18 @@ def extract_decomposable_modules(parent_module, z, module_list, output_size_list
         if not decomposable:
             break
 
-    is_comparable = isinstance(expected_z, torch.Tensor) and type(expected_z) == type(z)
-    if decomposable and is_comparable and expected_z.size() == z.size() and expected_z.isclose(z).all().item() == 1:
+    is_tensor = isinstance(expected_z, torch.Tensor) and isinstance(z, torch.Tensor)
+    if decomposable and is_tensor and expected_z.size() == z.size() and expected_z.isclose(z).all().item() == 1:
         module_list.extend(submodule_list)
         output_size_list.extend(sub_output_size_list)
         return expected_z, True
 
-    if decomposable and not is_comparable and expected_z == z:
+    if decomposable and not is_tensor and type(expected_z) == type(z) and expected_z == z:
         module_list.extend(submodule_list)
         output_size_list.extend(sub_output_size_list)
     elif not first:
         module_list.append(parent_module)
-        if is_comparable:
+        if is_tensor:
             output_size_list.append([*expected_z.size()])
         else:
             output_size_list.append(len(expected_z))
