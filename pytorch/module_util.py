@@ -1,3 +1,6 @@
+import torch
+
+
 def freeze_module_params(module):
     for param in module.parameters():
         param.requires_grad = False
@@ -46,12 +49,19 @@ def extract_decomposable_modules(parent_module, z, module_list, output_size_list
         if not decomposable:
             break
 
-    if decomposable and expected_z.size() == z.size() and expected_z.isclose(z).all().item() == 1:
+    is_tensor = isinstance(expected_z, torch.Tensor)
+    if decomposable and is_tensor and expected_z.size() == z.size() and expected_z.isclose(z).all().item() == 1:
         module_list.extend(submodule_list)
         output_size_list.extend(sub_output_size_list)
         return expected_z, True
 
-    if not first:
+    if decomposable and not is_tensor and expected_z == z:
+        module_list.extend(submodule_list)
+        output_size_list.extend(sub_output_size_list)
+    elif not first:
         module_list.append(parent_module)
-        output_size_list.append([*expected_z.size()])
+        if is_tensor:
+            output_size_list.append([*expected_z.size()])
+        else:
+            output_size_list.append(len(expected_z))
     return expected_z, True
