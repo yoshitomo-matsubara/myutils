@@ -12,9 +12,12 @@ def unfreeze_module_params(module):
         param.requires_grad = True
 
 
-def extract_decomposable_modules(parent_module, z, module_list, output_size_list=list(), first=True, exception_size=-1):
+def extract_decomposable_modules(parent_module, z, module_list, output_size_list=None, first=True, exception_size=-1):
     parent_module.eval()
     child_modules = list(parent_module.children())
+    if first:
+        output_size_list = list()
+
     if not child_modules:
         module_list.append(parent_module)
         try:
