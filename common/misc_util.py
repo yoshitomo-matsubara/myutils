@@ -1,5 +1,10 @@
 import inspect
+import os
 import sys
+
+
+def check_if_plottable():
+    return os.environ.get('DISPLAY', '') != ''
 
 
 def get_classes(package_name, require_names=False):
