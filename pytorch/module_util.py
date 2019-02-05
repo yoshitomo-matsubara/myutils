@@ -2,6 +2,10 @@ import torch
 import torch.nn as nn
 
 
+def count_params(model):
+    return sum(param.numel() for param in model.parameters())
+
+
 def freeze_module_params(module):
     for param in module.parameters():
         param.requires_grad = False
