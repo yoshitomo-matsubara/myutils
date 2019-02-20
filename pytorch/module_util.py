@@ -16,6 +16,25 @@ def unfreeze_module_params(module):
         param.requires_grad = True
 
 
+def extract_target_modules(parent_module, target_class, module_list):
+    if isinstance(parent_module, target_class):
+        module_list.append(parent_module)
+
+    child_modules = list(parent_module.children())
+    for child_module in child_modules:
+        extract_target_modules(child_module, target_class, module_list)
+
+
+def extract_all_child_modules(parent_module, module_list):
+    child_modules = list(parent_module.children())
+    if not child_modules:
+        module_list.append(parent_module)
+        return
+
+    for child_module in child_modules:
+        extract_all_child_modules(child_module, module_list)
+
+
 def extract_decomposable_modules(parent_module, z, module_list, output_size_list=None, first=True, exception_size=-1):
     parent_module.eval()
     child_modules = list(parent_module.children())
