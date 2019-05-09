@@ -50,5 +50,5 @@ def load_pickle(file_path):
         return pickle.load(fp)
 
 
-def get_binary_object_size(x):
-    return sys.getsizeof(pickle.dumps(x))
+def get_binary_object_size(x, unit_size=1024):
+    return sys.getsizeof(pickle.dumps(x)) / unit_size
