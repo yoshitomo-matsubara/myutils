@@ -1,5 +1,6 @@
 import os
 import pickle
+import sys
 
 
 def check_if_exists(file_path):
@@ -47,3 +48,7 @@ def save_pickle(entity, file_path):
 def load_pickle(file_path):
     with open(file_path, 'rb') as fp:
         return pickle.load(fp)
+
+
+def get_binary_object_size(x):
+    return sys.getsizeof(pickle.dumps(x))
