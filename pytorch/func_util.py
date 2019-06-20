@@ -23,6 +23,6 @@ def get_optimizer(target, optim_type, param_dict=dict(), **kwargs):
 
 def get_scheduler(optimizer, scheduler_type, param_dict=dict(), **kwargs):
     lower_scheduler_type = scheduler_type.lower()
-    if lower_scheduler_type in OPTIM_DICT:
+    if lower_scheduler_type in SCHEDULER_DICT:
         return SCHEDULER_DICT[lower_scheduler_type](optimizer, **param_dict, **kwargs)
     raise ValueError('scheduler_type `{}` is not expected'.format(scheduler_type))
