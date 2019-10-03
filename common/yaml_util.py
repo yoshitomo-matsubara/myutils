@@ -10,4 +10,4 @@ def load_yaml_file(yaml_file_path, custom_mode=True):
     if custom_mode:
         yaml.add_constructor('!join', yaml_join)
     with open(yaml_file_path, 'r') as fp:
-        return yaml.load(fp)
+        return yaml.load(fp, Loader=yaml.FullLoader)
