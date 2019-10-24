@@ -17,7 +17,7 @@ def get_optimizer(target, optim_type, param_dict=dict(), **kwargs):
     params = target.parameters() if isinstance(target, nn.Module) else target
     lower_optim_type = optim_type.lower()
     if lower_optim_type in OPTIM_DICT:
-        return OPTIM_DICT[lower_optim_type](params, **param_dict, **kwargs)
+        return OPTIM_DICT[lower_optim_type]([p for p in params if p.requires_grad], **param_dict, **kwargs)
     raise ValueError('optim_type `{}` is not expected'.format(optim_type))
 
 
