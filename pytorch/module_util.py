@@ -16,6 +16,16 @@ def unfreeze_module_params(module):
         param.requires_grad = True
 
 
+def get_module(root_module, module_path):
+    module_names = module_path.split('.')
+    module = root_module
+    for module_name in module_names:
+        if not hasattr(module, module_name):
+            return None
+        module = getattr(module, module_name)
+    return module
+
+
 def extract_target_modules(parent_module, target_class, module_list):
     if isinstance(parent_module, target_class):
         module_list.append(parent_module)
