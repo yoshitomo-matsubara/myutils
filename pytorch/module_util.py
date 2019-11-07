@@ -105,3 +105,18 @@ def extract_decomposable_modules(parent_module, z, module_list, output_size_list
         module_list.extend(submodule_list)
         output_size_list.extend(sub_output_size_list)
     return expected_z, True
+
+
+def extract_intermediate_io(x, module, module_paths):
+    input_list = list()
+    output_list = list()
+
+    def forward_hook(self, input, output):
+        input_list.append(input)
+        output_list.append(output)
+
+    for module_path in module_paths:
+        get_module(module, module_path).register_forward_hook(forward_hook)
+
+    module(x)
+    return input_list, output_list
