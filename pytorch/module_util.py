@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 import torch
 import torch.nn as nn
 
@@ -108,15 +110,18 @@ def extract_decomposable_modules(parent_module, z, module_list, output_size_list
 
 
 def extract_intermediate_io(x, module, module_paths):
-    input_list = list()
-    output_list = list()
+    io_dict = OrderedDict()
 
     def forward_hook(self, input, output):
-        input_list.append(input)
-        output_list.append(output)
+        path = self.__dict__['module_path']
+        if path not in io_dict:
+            io_dict[path] = list()
+        io_dict[path].append((input, output))
 
     for module_path in module_paths:
-        get_module(module, module_path).register_forward_hook(forward_hook)
+        target_module = get_module(module, module_path)
+        target_module.__dict__['module_path'] = module_path
+        target_module.register_forward_hook(forward_hook)
 
     module(x)
-    return input_list, output_list
+    return io_dict
