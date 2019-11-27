@@ -18,6 +18,14 @@ def unfreeze_module_params(module):
         param.requires_grad = True
 
 
+def get_updatable_param_names(module):
+    return [name for name, param in module.named_parameters() if param.requires_grad]
+
+
+def get_frozen_param_names(module):
+    return [name for name, param in module.named_parameters() if not param.requires_grad]
+
+
 def get_module(root_module, module_path):
     module_names = module_path.split('.')
     module = root_module
