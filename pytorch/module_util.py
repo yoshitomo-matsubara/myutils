@@ -36,6 +36,41 @@ def get_module(root_module, module_path):
     return module
 
 
+def get_hierarchized_dict(module_paths):
+    children_dict = OrderedDict()
+    for module_path in module_paths:
+        elements = module_path.split('.')
+        if elements[0] not in children_dict and len(elements) == 1:
+            children_dict[elements[0]] = module_path
+            continue
+        elif elements[0] not in children_dict:
+            children_dict[elements[0]] = list()
+        children_dict[elements[0]].append('.'.join(elements[1:]))
+
+    for key in children_dict.keys():
+        value = children_dict[key]
+        if isinstance(value, list) and len(value) > 1:
+            children_dict[key] = get_hierarchized_dict(value)
+    return children_dict
+
+
+def decompose(ordered_dict):
+    component_list = list()
+    for key, value in ordered_dict.items():
+        if isinstance(value, OrderedDict):
+            component_list.append((key, decompose(value)))
+        elif isinstance(value, list):
+            component_list.append((key, value))
+        else:
+            component_list.append(key)
+    return component_list
+
+
+def get_components(module_paths):
+    ordered_dict = get_hierarchized_dict(module_paths)
+    return decompose(ordered_dict)
+
+
 def extract_target_modules(parent_module, target_class, module_list):
     if isinstance(parent_module, target_class):
         module_list.append(parent_module)
