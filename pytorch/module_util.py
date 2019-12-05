@@ -161,10 +161,15 @@ def extract_intermediate_io(x, module, module_paths):
             io_dict[path] = list()
         io_dict[path].append((input, output))
 
+    hook_list = list()
     for module_path in module_paths:
         target_module = get_module(module, module_path)
         target_module.__dict__['module_path'] = module_path
-        target_module.register_forward_hook(forward_hook)
+        hook = target_module.register_forward_hook(forward_hook)
+        hook_list.append(hook)
 
     module(x)
+    while len(hook_list) > 0:
+        hook = hook_list.pop()
+        hook.remove()
     return io_dict
