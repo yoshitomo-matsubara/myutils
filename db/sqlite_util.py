@@ -35,4 +35,4 @@ def load_table_names(cursor, db_name='sqlite_master'):
 def load_data_from_table(column_names, table_id, cursor):
     column_names_str = ', '.join(column_names)
     cursor.execute('SELECT {} FROM "{}"'.format(column_names_str, table_id))
-    return [result for result in cursor.fetchall()]
+    return cursor.fetchall()
