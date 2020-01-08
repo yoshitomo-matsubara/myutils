@@ -32,7 +32,10 @@ def load_table_names(cursor, db_name='sqlite_master'):
     return [result[0] for result in cursor.fetchall()]
 
 
-def load_data_from_table(column_names, table_id, cursor):
+def load_data_from_table(column_names, table_id, cursor, condition=None):
     column_names_str = ', '.join(column_names)
-    cursor.execute('SELECT {} FROM "{}"'.format(column_names_str, table_id))
+    if condition is None:
+        cursor.execute('SELECT {} FROM "{}"'.format(column_names_str, table_id))
+    else:
+        cursor.execute('SELECT {} FROM "{}" {}'.format(column_names_str, table_id, condition))
     return cursor.fetchall()
