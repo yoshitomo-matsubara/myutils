@@ -4,7 +4,7 @@ from myutils.common import file_util
 
 
 def open_database(db_file_path):
-    print('Creating a database at {}'.format(db_file_path))
+    print('Establishing a connection with a database at {}'.format(db_file_path))0
     file_util.make_parent_dirs(db_file_path)
     connection = sqlite3.connect(db_file_path)
     cursor = connection.cursor()
@@ -12,7 +12,7 @@ def open_database(db_file_path):
 
 
 def close_database(connection, cursor):
-    print('Closing a database')
+    print('Closing a connection')
     cursor.close()
     connection.close()
 
