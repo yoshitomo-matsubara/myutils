@@ -4,7 +4,7 @@ from myutils.common import file_util
 
 
 def open_database(db_file_path):
-    print('Establishing a connection with a database at {}'.format(db_file_path))0
+    print('Establishing a connection with a database at {}'.format(db_file_path))
     file_util.make_parent_dirs(db_file_path)
     connection = sqlite3.connect(db_file_path)
     cursor = connection.cursor()
