@@ -1,7 +1,12 @@
 from collections import OrderedDict
 
 import torch
-import torch.nn as nn
+from torch.nn import DataParallel, Sequential
+from torch.nn.parallel import DistributedDataParallel
+
+
+def check_if_wrapped(model):
+    return isinstance(model, (DataParallel, DistributedDataParallel))
 
 
 def count_params(model):
@@ -31,7 +36,7 @@ def get_module(root_module, module_path):
     module = root_module
     for module_name in module_names:
         if not hasattr(module, module_name):
-            if isinstance(module, nn.Sequential):
+            if isinstance(module, Sequential):
                 module = module[int(module_name)]
             else:
                 print('`{}` of `{}` could not be reached in `{}`'.format(module_name, module_path,
@@ -151,7 +156,7 @@ def extract_decomposable_modules(parent_module, z, module_list, output_size_list
             output_size_list.append([*expected_z.size()])
         else:
             output_size_list.append(len(expected_z))
-    elif not isinstance(parent_module, nn.DataParallel) and len(module_list) == len(output_size_list) == 0\
+    elif not check_if_wrapped(parent_module) and len(module_list) == len(output_size_list) == 0\
             and len(submodule_list) > 0 and len(sub_output_size_list) > 0:
         module_list.extend(submodule_list)
         output_size_list.extend(sub_output_size_list)
