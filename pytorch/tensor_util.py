@@ -14,8 +14,7 @@ def quantize_tensor(x, num_bits=8):
     zero_point = qmin if initial_zero_point < qmin else qmax if initial_zero_point > qmax else initial_zero_point
     zero_point = int(zero_point)
     qx = zero_point + x / scale
-    qx.clamp_(qmin, qmax)
-    qx = qx.round().byte()
+    qx = qx.clamp(qmin, qmax).round().byte()
     return QuantizedTensor(tensor=qx, scale=scale, zero_point=zero_point)
 
 
