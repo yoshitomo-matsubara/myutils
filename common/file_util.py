@@ -1,6 +1,7 @@
 import os
 import pickle
 import sys
+from pathlib import Path
 
 
 def check_if_exists(file_path):
@@ -30,13 +31,11 @@ def get_dir_path_list(dir_path, is_recursive=False, is_sorted=False):
 
 
 def make_dirs(dir_path):
-    if len(dir_path) > 0 and not os.path.exists(dir_path):
-        os.makedirs(dir_path)
+    Path(dir_path).mkdir(parents=True, exist_ok=True)
 
 
 def make_parent_dirs(file_path):
-    dir_path = os.path.dirname(file_path)
-    make_dirs(dir_path)
+    Path(file_path).parent.mkdir(parents=True, exist_ok=True)
 
 
 def save_pickle(entity, file_path):
